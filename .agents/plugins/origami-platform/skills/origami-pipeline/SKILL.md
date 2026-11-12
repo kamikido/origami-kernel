@@ -1,6 +1,6 @@
 ---
 name: origami-pipeline
-description: "Сквозной 7-шаговый агентный конвейер разработки 1С ('Конфигуратор на стероидах'): от неструктурированной идеи до сдачи задачи, включая синтез ТЗ с инвариантами, Adversarial Audit через OmniRoute, Human Gate, Pure-Diff линтинг и Data Seeder."
+description: "Сквозной 7-шаговый агентный конвейер разработки 1С: от неструктурированной идеи до сдачи задачи, включая синтез ТЗ с инвариантами, Adversarial Audit через OmniRoute, Human Gate, Pure-Diff линтинг и Data Seeder."
 ---
 
 # Сквозной 7-шаговый пайплайн задачи (The Origami Pipeline)
