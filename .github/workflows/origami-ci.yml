@@ -1,0 +1,61 @@
+name: Origami Kernel CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  quality-gate:
+    name: Static Quality Gate & Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate JSON templates and schemas
+        run: |
+          for f in templates/*.json; do
+            echo "Checking $f..."
+            python -m json.tool "$f" > /dev/null
+          done
+
+      - name: Validate Python scripts syntax
+        run: |
+          python -m py_compile tools/*.py
+
+      - name: Verify L1 Core Doctor Diagnosis
+        run: |
+          python tools/doctor.py
+
+      - name: Verify Configuration Reader
+        run: |
+          python tools/origami_config.py show
+
+      - name: Verify Pure-Diff BSL Linter
+        run: |
+          # Create a clean sample BSL file and test linter
+          mkdir -p scratch
+          cat << 'EOF' > scratch/ci_test.bsl
+          Процедура Тест()
+              Если Истина Тогда
+                  Сообщить("Hello Origami");
+              Иначе
+                  Возврат;
+              КонецЕсли;
+          КонецПроцедуры
+          EOF
+          python tools/lint_bsl_diff.py --file scratch/ci_test.bsl
+
+      - name: Secret Scan (Grep for token patterns)
+        run: |
+          echo "Scanning for accidental secret leaks..."
+          # Fail if any test API key patterns or internal credentials are found
+          ! grep -rnE "sk-[0-9a-zA-Z]{20,}" --exclude="*.example" --exclude="*.log" .

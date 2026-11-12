@@ -1,0 +1,35 @@
+{
+  "vrunner": {
+    "ibconnection": "{{IBCONNECTION}}",
+    "v8version": "{{V8_VERSION}}",
+    "db-user": "{{DB_USER}}",
+    "db-pwd": "",
+    "validate": {
+      "syntax-check": {
+        "mode": [
+          "ThinClient",
+          "Server",
+          "ExternalConnection"
+        ],
+        "report-format": [
+          "junit"
+        ],
+        "report-path": "./tests/reports/syntax-check.xml"
+      }
+    },
+    "test": {
+      "vanessa": {
+        "feature-path": "./tests/features",
+        "report-format": [
+          "junit"
+        ],
+        "report-path": "./tests/reports/vanessa.xml"
+      }
+    }
+  },
+  "logos": {
+    "logger": {
+      "vrunner": "INFO"
+    }
+  }
+}

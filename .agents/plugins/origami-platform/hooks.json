@@ -1,0 +1,42 @@
+{
+  "bsl-quality-gate": {
+    "enabled": true,
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/post_edit_bsl.ps1",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "task-completion-guard": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/stop_guard.ps1",
+        "timeout": 15
+      }
+    ]
+  },
+  "safety-gate": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/pre_command_guard.ps1",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

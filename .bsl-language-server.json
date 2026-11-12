@@ -1,0 +1,22 @@
+{
+  "$schema": "https://1c-syntax.github.io/bsl-language-server/configuration/schema.json",
+  "diagnostics": {
+    "computeTrigger": "onSave",
+    "parameters": {
+      "LineLength": { "severity": "Information", "maxLineLength": 120 },
+      "CognitiveComplexity": { "severity": "Information", "maxComplexity": 15 },
+      "UnusedVariable": { "severity": "Information" },
+      "EmptyStatement": { "severity": "Information" },
+      "DuplicateMethod": { "severity": "Error" },
+      "Typo": { "severity": "None" },
+      "MagicNumber": { "severity": "None" },
+      "MethodSize": { "severity": "None" },
+      "CommentedCode": { "severity": "None" },
+      "UnknownMethod": { "severity": "None" },
+      "UnknownField": { "severity": "None" },
+      "UnknownType": { "severity": "None" },
+      "UnknownMetadata": { "severity": "None" },
+      "UnknownVariable": { "severity": "None" }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "origami-platform",
+    "one-s-mcp"
+  ]
+}
