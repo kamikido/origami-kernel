@@ -1,4 +1,4 @@
-﻿# form-remove v1.4 — Remove form from 1C object
+﻿﻿# form-remove v1.4 — Remove form from 1C object
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills, pinned at
 #         ecd289fe11733028d87b55284ea9fb5feff8f513.
 # Licence: MIT, Copyright (c) 2025-2026 Nick Shirokov. Full notice and permission

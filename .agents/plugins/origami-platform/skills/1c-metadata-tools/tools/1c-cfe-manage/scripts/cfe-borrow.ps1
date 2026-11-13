@@ -1,4 +1,4 @@
-﻿# cfe-borrow v1.11 — Borrow objects from configuration into extension (CFE)
+﻿﻿# cfe-borrow v1.11 — Borrow objects from configuration into extension (CFE)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: BaseForm indents only between tags; a multi-line text keeps its bytes.
 # Local: Configurator 2.20 shapes — form InternalInfo PropertyState, CommandSet kept, no empty form module,

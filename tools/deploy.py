@@ -44,6 +44,7 @@ KERNEL_MANAGED_ITEMS = [
     "tools/origami_config.py",
     "tools/doctor.py",
     "tools/premodel.py",
+    "tools/feedback.py",
     "tools/adversarial_review.py",
     "tools/lint_bsl_diff.py",
     "tools/common.ps1",
@@ -55,6 +56,7 @@ KERNEL_MANAGED_ITEMS = [
     ".agents/plugins/origami-platform",
     ".bsl-language-server.json",
     "templates",
+    "knowledge",
 ]
 
 # Sensitive project files NEVER overwritten during 'update'

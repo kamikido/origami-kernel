@@ -1,4 +1,4 @@
-﻿# post_edit_bsl.ps1 — Хук PostToolUse: Автоформатирование на лету + Pure-Diff BSL линтер
+﻿﻿# post_edit_bsl.ps1 — Хук PostToolUse: Автоформатирование на лету + Pure-Diff BSL линтер
 
 
 

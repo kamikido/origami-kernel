@@ -1,4 +1,4 @@
-﻿# epf-init v1.1 — Init 1C external data processor scaffold
+﻿﻿# epf-init v1.1 — Init 1C external data processor scaffold
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

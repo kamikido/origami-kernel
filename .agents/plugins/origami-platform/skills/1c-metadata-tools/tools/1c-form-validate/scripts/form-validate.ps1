@@ -1,4 +1,4 @@
-﻿# form-validate v1.10 — Validate 1C managed form
+﻿﻿# form-validate v1.10 — Validate 1C managed form
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: DynamicList attributes without MainTable and QueryText are an error —
 # the form loads but fails to open.

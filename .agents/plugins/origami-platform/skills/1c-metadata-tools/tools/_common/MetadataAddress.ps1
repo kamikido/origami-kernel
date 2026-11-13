@@ -1,4 +1,4 @@
-﻿# MetadataAddress.ps1 — logical 1C metadata addresses to physical dump paths.
+﻿﻿# MetadataAddress.ps1 — logical 1C metadata addresses to physical dump paths.
 #
 # The vendored tools address a Designer XML dump by file path: the caller has to
 # know that `Справочник.Контрагенты` lives in `Catalogs\Контрагенты.xml` and that

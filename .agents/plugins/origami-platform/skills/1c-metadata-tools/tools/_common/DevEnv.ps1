@@ -1,4 +1,4 @@
-# DevEnv.ps1 - read project settings from `.dev.env`.
+﻿# DevEnv.ps1 - read project settings from `.dev.env`.
 #
 # In the 1c-rules toolkit `.dev.env` at the project root is the single source of
 # truth for project parameters. The vendored cc-1c-skills scripts natively read

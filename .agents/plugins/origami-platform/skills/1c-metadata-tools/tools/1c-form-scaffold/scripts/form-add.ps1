@@ -1,4 +1,4 @@
-﻿# form-add v1.12 — Add managed form to 1C config object
+﻿﻿# form-add v1.12 — Add managed form to 1C config object
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: -FormName must be a 1C identifier (refused with exit 2 before any path
 # or XPath is built from it), and the object form of an information register

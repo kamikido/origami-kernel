@@ -1,4 +1,4 @@
-﻿# form-compile v1.176 — Compile 1C managed form from JSON or object metadata
+﻿﻿# form-compile v1.176 — Compile 1C managed form from JSON or object metadata
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: from-object — a document choice form gets ChoiceMode like the catalog
 # one, the document item preset writes AutoTime=CurrentOrLast /

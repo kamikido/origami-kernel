@@ -1,4 +1,4 @@
-﻿# cfe-validate v1.5 — Validate 1C configuration extension structure (CFE)
+﻿﻿# cfe-validate v1.5 — Validate 1C configuration extension structure (CFE)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: a borrowed form may have no Module.bsl; check 12 reports a missing CommonPicture or
 #        a StyleItem outside the platform style list as an error.

@@ -1,4 +1,4 @@
-﻿# xdto-validate v1.1 — Validate a 1C XDTO package
+﻿﻿# xdto-validate v1.1 — Validate a 1C XDTO package
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

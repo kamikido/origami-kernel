@@ -1,4 +1,4 @@
-﻿# uuid-check v1.0 — Detect (and optionally repair) duplicate UUIDs in a 1C XML configuration dump
+﻿﻿# uuid-check v1.0 — Detect (and optionally repair) duplicate UUIDs in a 1C XML configuration dump
 # Ported from check_uuid_duplicates.py of https://github.com/Desko77/claude-code-skills-1c (MIT)
 # and adapted to the Configurator XML format: `uuid="..."` attributes plus
 # <xr:TypeId> / <xr:ValueId> elements inside <InternalInfo>.

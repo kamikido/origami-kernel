@@ -1,4 +1,4 @@
-﻿# cfe-diff v1.0 — Analyze and compare 1C configuration extension (CFE)
+﻿﻿# cfe-diff v1.0 — Analyze and compare 1C configuration extension (CFE)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

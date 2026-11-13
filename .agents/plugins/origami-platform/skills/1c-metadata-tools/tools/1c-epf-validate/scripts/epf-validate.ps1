@@ -1,4 +1,4 @@
-﻿# epf-validate v1.2 — Validate 1C external data processor / report structure
+﻿﻿# epf-validate v1.2 — Validate 1C external data processor / report structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Works for both EPF (ExternalDataProcessor) and ERF (ExternalReport) — auto-detects
 param(

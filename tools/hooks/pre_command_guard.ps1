@@ -1,4 +1,4 @@
-﻿# pre_command_guard.ps1 — Хук PreToolUse: Защита от деструктивных терминальных команд
+﻿﻿# pre_command_guard.ps1 — Хук PreToolUse: Защита от деструктивных терминальных команд
 
 
 

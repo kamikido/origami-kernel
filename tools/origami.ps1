@@ -47,6 +47,7 @@ function Show-Help {
 
 Команды AI-консилиума и качества:
   premodel "<задача>"        Консилиум моделей OmniRoute: цели, слепые зоны, риски
+  feedback -m <стенограмма>  Архитектурный анализ совещания (Continuous Learning Loop)
   audit <файл|diff>          Независимый AI-аудит качества BSL-кода
   format <файл> [--diff]     Автоформатирование BSL на 120 символов (OneScript)
   lint <файл> [-l строки]    Pure-Diff статический линтинг измененных строк
@@ -97,6 +98,14 @@ switch ($cmd) {
             exit 1
         }
         python (Join-Path $PSScriptRootResolved "premodel.py") @SubArgs
+    }
+
+    "feedback" {
+        if ($SubArgs.Count -lt 1) {
+            Write-Host "Ошибка: Укажите путь к файлу стенограммы (-m <файл>)." -ForegroundColor Red
+            exit 1
+        }
+        python (Join-Path $PSScriptRootResolved "feedback.py") @SubArgs
     }
 
     "audit" {

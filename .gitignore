@@ -35,6 +35,7 @@ scratch/
 temp/
 build/
 tests/reports/
+knowledge/cases/
 
 # IDE and OS artifacts
 .vscode/
