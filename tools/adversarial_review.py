@@ -101,7 +101,7 @@ def call_omniroute(prompt: str, code_content: str, model: str = None, timeout: i
             {"role": "user", "content": user_message}
         ],
         "temperature": 0.1,
-        "max_tokens": 2048
+        "max_tokens": 4096
     }
 
     req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
@@ -208,12 +208,12 @@ def main():
     try:
         result = call_omniroute(SYSTEM_PROMPT, content, model=args.model, timeout=args.timeout)
     except Exception as e:
-        err_msg = f"[!] Ошибка вызова OmniRoute AI: {e}"
+        err_msg = f"[!] Системная ошибка вызова OmniRoute AI: {e}"
         if args.json:
             print(json.dumps({"decision": "ERROR", "summary": str(e), "issues": []}, ensure_ascii=False))
         else:
             print(err_msg, file=sys.stderr)
-        sys.exit(1)
+        sys.exit(2)
 
     # Сохраняем отчеты
     root_dir = CFG.root_dir if CFG else Path.cwd()

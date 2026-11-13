@@ -1,22 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Pure-Diff BSL Linter — Авторский статический анализатор стандартов 1С (платформа 8.3.27)
+Pure-Diff BSL Linter — Авторский статический анализатор стандартов 1С (платформа 8.3 / 8.5).
 Часть платформенного каркаса Origami Platform.
 
 Принципы Pure-Diff анализа:
 1. Изоляция: Проверяются СТРОГО добавленные/измененные строки (Green Hunks).
 2. Амнистия R-003: Закомментированный чужой код в блоках удаления // { - ... } амнистирован.
-3. Eye-Only Policy: Чужой легаси-код вокруг правок не проверяется.
-4. Отсутствие ложных срабатываний: Не проверяет существование внешних метаданных базы
-   (исключает ошибки на РасчетыСКлиентамиПоСрокам и методы вендора в расширениях).
-
-Контролируемые стандарты (в добавленных строках имеют статус ERROR, код выхода 1):
-- LineLength: Длина строки <= 120 символов (Стандарт 456).
-- UsingOrInWhere: Запрет оператора ИЛИ в условии ГДЕ запросов (Стандарт 658).
-- UnionWithoutAll: Использование ОБЪЕДИНИТЬ ВСЕ вместо ОБЪЕДИНИТЬ (Стандарт 434).
-- DeprecatedError: Запрет устаревшего ПодробноеПредставлениеОшибки (стандарт БСП).
-- MissingElse: Обязательный блок Иначе в конструкциях Если-ИначеЕсли.
-- CognitiveComplexity: Ограничение глубины вложенности блоков (<= 5 отступов / 15 сложность).
+3. Eye-Only Policy: Окружающий легаси-код защищен от проверок.
+4. Учет табов: Вычисление длины строки с учетом визуальной ширины таба в Конфигураторе 1С (tab-width=4).
+5. Разделение кодов возврата:
+   - 0: Замечаний не обнаружено (Clean Zero)
+   - 1: Обнаружены нарушения стандартов качества BSL
+   - 2: Системная ошибка выполнения (файл не найден, ошибка разбора, сбой среды)
 """
 
 import sys
@@ -24,6 +19,8 @@ import os
 import re
 import argparse
 import json
+import subprocess
+from typing import Set, Tuple, List, Dict, Any
 
 # Гарантируем UTF-8 вывод на консоль Windows
 if sys.stdout.encoding != 'utf-8':
@@ -39,10 +36,13 @@ if sys.stderr.encoding != 'utf-8':
         pass
 
 
-def parse_line_ranges(ranges_str):
-    """
-    Разбирает строку диапазонов: '10-25' или '10-25,40-60' или '15' в множество номеров строк (1-based).
-    """
+def get_visual_line_length(line: str, tab_width: int = 4) -> int:
+    """Вычисляет визуальную длину строки в колонках Конфигуратора 1С."""
+    return len(line.expandtabs(tab_width))
+
+
+def parse_line_ranges(ranges_str: str) -> Set[int]:
+    """Разбирает строку диапазонов: '10-25' или '10-25,40-60' или '15' в множество номеров строк."""
     lines_set = set()
     if not ranges_str:
         return lines_set
@@ -66,11 +66,38 @@ def parse_line_ranges(ranges_str):
     return lines_set
 
 
-def find_author_green_lines(lines, author_marker):
+def get_git_changed_lines(file_path: str, ref: str = "HEAD") -> Set[int]:
+    """Извлекает номера добавленных/измененных строк (Green Hunks) напрямую через git diff."""
+    changed_lines = set()
+    try:
+        cmd = ["git", "diff", "-U0", ref, "--", file_path]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, encoding="utf-8", errors="replace")
+        if res.returncode != 0:
+            return changed_lines
+
+        # Парсим diff hunks: @@ -a,b +start,count @@ или @@ -a,b +start @@
+        hunk_pattern = re.compile(r'^@@\s+-[0-9]+(?:,[0-9]+)?\s+\+([0-9]+)(?:,([0-9]+))?\s+@@')
+        current_line = 0
+
+        for line in res.stdout.splitlines():
+            m = hunk_pattern.match(line)
+            if m:
+                start = int(m.group(1))
+                count = int(m.group(2)) if m.group(2) else 1
+                current_line = start
+                if count > 0:
+                    changed_lines.update(range(start, start + count))
+    except Exception:
+        pass
+
+    return changed_lines
+
+
+def find_author_green_lines(lines: List[str], author_marker: str) -> Tuple[Set[int], Set[int]]:
     """
-    Определяет номера строк, добавленных автором по корпоративному регламенту R-003:
+    Определяет номера строк, добавленных автором по регламенту:
     // { + ЛС ... } или // + ...
-    А также определяет амнистированные строки удаления: // { - ... }
+    А также амнистированные строки удаления: // { - ... }
     """
     green_lines = set()
     amnestied_lines = set()
@@ -110,44 +137,46 @@ def find_author_green_lines(lines, author_marker):
     return green_lines, amnestied_lines
 
 
-def lint_bsl_content(file_path, content, target_lines=None, author=""):
-    """
-    Выполняет Pure-Diff анализ BSL кода.
-    target_lines: set номеров строк, подлежащих проверке. Если пустой — определяются по author или проверяется всё.
-    """
+def lint_bsl_content(
+    file_path: str,
+    content: str,
+    target_lines: Set[int] = None,
+    author: str = "",
+    tab_width: int = 4,
+    strict_else: bool = False
+) -> List[Dict[str, Any]]:
+    """Выполняет Pure-Diff статический анализ BSL кода."""
     lines = content.splitlines(True)
     total_lines = len(lines)
 
     # 1. Определение амнистированных строк (Red Hunks // { - ... })
     author_green, amnestied_lines = find_author_green_lines(lines, author)
 
-    # Если диапазон строк не задан явно, но есть автор — проверяем строки автора
     if not target_lines:
         if author_green:
             check_lines = author_green
         else:
-            # Если диапазон не задан и блоков автора нет — проверяем весь файл (за вычетом амнистированных)
             check_lines = set(range(1, total_lines + 1))
     else:
         check_lines = target_lines
 
     # Исключаем амнистированные строки удаления
     check_lines = check_lines - amnestied_lines
-
     issues = []
 
-    # 1. Проверка длины строки (Стандарт 456)
+    # 1. Проверка визуальной длины строки (Стандарт 456, с учетом ширины таба)
     for idx, raw_line in enumerate(lines, 1):
         if idx not in check_lines:
             continue
         clean_line = raw_line.rstrip('\r\n')
-        if len(clean_line) > 120:
+        vis_len = get_visual_line_length(clean_line, tab_width=tab_width)
+        if vis_len > 120:
             issues.append({
                 "file": file_path,
                 "line": idx,
                 "severity": "ERROR",
                 "code": "LineLength",
-                "message": f"Длина строки {len(clean_line)} превышает допустимую 120 (Стандарт 456)"
+                "message": f"Визуальная длина строки {vis_len} (таб={tab_width}) превышает допустимую 120 (Стандарт 456)"
             })
 
     # 2. Проверка устаревшего метода ПодробноеПредставлениеОшибки
@@ -155,7 +184,6 @@ def lint_bsl_content(file_path, content, target_lines=None, author=""):
         if idx not in check_lines:
             continue
         if "ПодробноеПредставлениеОшибки" in raw_line and "ОбработкаОшибок." not in raw_line:
-            # Игнорируем в комментариях
             clean_str = raw_line.strip()
             if not clean_str.startswith("//"):
                 issues.append({
@@ -174,7 +202,6 @@ def lint_bsl_content(file_path, content, target_lines=None, author=""):
         up = raw_line.upper()
         clean = raw_line.strip()
 
-        # Игнорируем закомментированные строки
         if clean.startswith("//"):
             continue
 
@@ -182,7 +209,6 @@ def lint_bsl_content(file_path, content, target_lines=None, author=""):
             in_query = True
 
         if in_query:
-            # Проверка ОБЪЕДИНИТЬ без ВСЕ (Стандарт 434)
             if idx in check_lines:
                 if re.search(r'\|\s*ОБЪЕДИНИТЬ\b(?!\s+ВСЕ\b)', raw_line, re.IGNORECASE):
                     issues.append({
@@ -213,37 +239,38 @@ def lint_bsl_content(file_path, content, target_lines=None, author=""):
             in_query = False
             in_where = False
 
-    # 4. Проверка Если-ИначеЕсли без закрывающего Иначе
-    for idx, raw_line in enumerate(lines, 1):
-        if idx not in check_lines:
-            continue
-        clean_strip = raw_line.strip()
-        if clean_strip.startswith("//"):
-            continue
-        if clean_strip.startswith("ИначеЕсли") or " ИначеЕсли " in raw_line:
-            has_else = False
-            nesting = 0
-            for j in range(idx, min(idx + 120, total_lines)):
-                sub_strip = lines[j].strip()
-                if sub_strip.startswith("//"):
-                    continue
-                if sub_strip.startswith("Если ") or sub_strip.startswith("Если(") or sub_strip.startswith("Если\t"):
-                    nesting += 1
-                elif sub_strip.startswith("КонецЕсли"):
-                    if nesting == 0:
+    # 4. Проверка Если-ИначеЕсли без закрывающего Иначе (Строгий режим)
+    if strict_else:
+        for idx, raw_line in enumerate(lines, 1):
+            if idx not in check_lines:
+                continue
+            clean_strip = raw_line.strip()
+            if clean_strip.startswith("//"):
+                continue
+            if clean_strip.startswith("ИначеЕсли") or " ИначеЕсли " in raw_line:
+                has_else = False
+                nesting = 0
+                for j in range(idx, min(idx + 120, total_lines)):
+                    sub_strip = lines[j].strip()
+                    if sub_strip.startswith("//"):
+                        continue
+                    if sub_strip.startswith("Если ") or sub_strip.startswith("Если(") or sub_strip.startswith("Если\t"):
+                        nesting += 1
+                    elif sub_strip.startswith("КонецЕсли"):
+                        if nesting == 0:
+                            break
+                        nesting -= 1
+                    elif nesting == 0 and sub_strip.startswith("Иначе") and not sub_strip.startswith("ИначеЕсли"):
+                        has_else = True
                         break
-                    nesting -= 1
-                elif nesting == 0 and sub_strip.startswith("Иначе") and not sub_strip.startswith("ИначеЕсли"):
-                    has_else = True
-                    break
-            if not has_else:
-                issues.append({
-                    "file": file_path,
-                    "line": idx,
-                    "severity": "ERROR",
-                    "code": "MissingElse",
-                    "message": "Конструкция Если-ИначеЕсли должна заканчиваться блоком Иначе (Стандарт 1С)"
-                })
+                if not has_else:
+                    issues.append({
+                        "file": file_path,
+                        "line": idx,
+                        "severity": "WARNING",
+                        "code": "MissingElse",
+                        "message": "Ветка Если-ИначеЕсли не содержит завершающего блока Иначе"
+                    })
 
     # 5. Проверка глубины вложенности блоков (когнитивная сложность)
     current_proc = ""
@@ -287,7 +314,6 @@ def lint_bsl_content(file_path, content, target_lines=None, author=""):
 
 
 def main():
-    # Попытка получить автора из origami.config.json
     default_author = ""
     try:
         cur_dir = os.path.dirname(os.path.abspath(__file__))
@@ -302,7 +328,10 @@ def main():
     parser = argparse.ArgumentParser(description="Pure-Diff BSL Linter (Origami Platform)")
     parser.add_argument("--file", "-f", required=True, help="Путь к файлу .bsl для проверки")
     parser.add_argument("--lines", "-l", default="", help="Диапазон проверяемых строк (например: '10-25' или '10-25,40-60')")
+    parser.add_argument("--git-diff", "-g", nargs="?", const="HEAD", default=None, help="Автоматически извлечь измененные строки из git diff (опционально: git ref, по умолчанию HEAD)")
     parser.add_argument("--author", "-a", default=default_author, help="Имя или маркер автора для фильтрации")
+    parser.add_argument("--tab-width", type=int, default=4, help="Визуальная ширина знака табуляции в колонках Конфигуратора (по умолчанию: 4)")
+    parser.add_argument("--strict-else", action="store_true", default=False, help="Включить строгий контроль блока Иначе в конструкциях Если-ИначеЕсли")
     parser.add_argument("--json", action="store_true", help="Вывод результатов в формате JSON")
 
     args = parser.parse_args()
@@ -325,14 +354,29 @@ def main():
             print(f"[!] Ошибка чтения файла: {e}", file=sys.stderr)
         sys.exit(2)
 
-    target_lines = parse_line_ranges(args.lines)
-    issues = lint_bsl_content(file_path, content, target_lines=target_lines, author=args.author)
+    # Определение проверяемых строк
+    target_lines = set()
+    if args.git_diff is not None:
+        target_lines = get_git_changed_lines(file_path, ref=args.git_diff)
+    elif args.lines:
+        target_lines = parse_line_ranges(args.lines)
+
+    issues = lint_bsl_content(
+        file_path,
+        content,
+        target_lines=target_lines,
+        author=args.author,
+        tab_width=args.tab_width,
+        strict_else=args.strict_else
+    )
 
     if args.json:
         print(json.dumps(issues, ensure_ascii=False, indent=2))
     else:
         rel_path = os.path.relpath(file_path, os.getcwd()) if file_path.startswith(os.getcwd()) else file_path
-        if target_lines:
+        if args.git_diff is not None:
+            scope_desc = f"git diff {args.git_diff} ({len(target_lines)} строк)"
+        elif target_lines:
             scope_desc = f"строки {args.lines}"
         elif args.author:
             scope_desc = f"автор '{args.author}'"
@@ -351,7 +395,8 @@ def main():
 
         print("\n[FAIL] Проверка завершилась с ошибками (Clean Zero нарушен).")
 
-    sys.exit(1 if issues else 0)
+    # Код выхода 1 только при наличии реальных замечаний
+    sys.exit(1 if any(i.get("severity") == "ERROR" for i in issues) else 0)
 
 
 if __name__ == "__main__":

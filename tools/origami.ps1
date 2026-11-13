@@ -140,7 +140,9 @@ switch ($cmd) {
             Write-Host "Ошибка: Укажите файл BSL для линтинга." -ForegroundColor Red
             exit 1
         }
-        python (Join-Path $PSScriptRootResolved "lint_bsl_diff.py") --file $SubArgs[0]
+        $targetFile = $SubArgs[0]
+        $remainingArgs = if ($SubArgs.Count -gt 1) { $SubArgs[1..($SubArgs.Count - 1)] } else { @() }
+        python (Join-Path $PSScriptRootResolved "lint_bsl_diff.py") --file $targetFile @remainingArgs
     }
 
     "check" {
