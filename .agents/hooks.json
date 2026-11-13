@@ -3,7 +3,7 @@
     "enabled": true,
     "PostToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
             "type": "command",
@@ -33,7 +33,7 @@
           {
             "type": "command",
             "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/pre_command_guard.ps1', '../../../tools/hooks/pre_command_guard.ps1', './tools/hooks/pre_command_guard.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{\\\"decision\\\":\\\"allow\\\"}' }\"",
-            "timeout": 5
+            "timeout": 15
           }
         ]
       }

@@ -1,4 +1,4 @@
-﻿# common_hook.ps1 — Общая библиотека функций для системных хуков Antigravity IDE (Origami Platform)
+# common_hook.ps1 — Общая библиотека функций для системных хуков Antigravity IDE (Origami Platform)
 
 
 
@@ -7,6 +7,7 @@ try {
     [Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false)
     [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
     $OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    [Console]::SetError([System.IO.StreamWriter]::new([Console]::OpenStandardError(), [System.Text.UTF8Encoding]::new($false)))
 } catch {}
 
 
@@ -118,87 +119,50 @@ function Get-EditedFileInfo {
 
 
     # Вариант 1: аргументы переданы напрямую в toolCall.args
-
     if ($Payload.toolCall -and $Payload.toolCall.args) {
-
         $argsObj = $Payload.toolCall.args
-
-        if ($argsObj.TargetFile) {
-
-            $result.TargetFile = $argsObj.TargetFile
-
+        $filePath = if ($argsObj.Path) { $argsObj.Path } elseif ($argsObj.TargetFile) { $argsObj.TargetFile } elseif ($argsObj.file_path) { $argsObj.file_path } else { "" }
+        if ($filePath) {
+            $result.TargetFile = $filePath
         }
-
         if ($argsObj.StartLine) { $result.StartLine = [int]$argsObj.StartLine }
-
         if ($argsObj.EndLine) { $result.EndLine = [int]$argsObj.EndLine }
-
         return $result
-
     }
 
-
-
     # Вариант 2: считывание из transcriptPath по stepIdx
-
     if ($Payload.transcriptPath -and (Test-Path $Payload.transcriptPath)) {
-
         try {
-
             $lines = Get-Content -Path $Payload.transcriptPath -Encoding UTF8
-
             $stepIdx = if ($Payload.stepIdx) { [int]$Payload.stepIdx } else { -1 }
 
-
-
             # Ищем с конца подходящую запись шага с tool_calls
-
             for ($i = $lines.Count - 1; $i -ge 0; $i--) {
-
                 $line = $lines[$i]
-
                 if ([string]::IsNullOrWhiteSpace($line)) { continue }
-
                 $step = $line | ConvertFrom-Json
-
                 if ($stepIdx -gt 0 -and $step.step_index -ne $stepIdx) { continue }
 
-
-
                 if ($step.tool_calls) {
-
                     foreach ($tc in $step.tool_calls) {
-
-                        if ($tc.name -match "write_to_file|replace_file_content|multi_replace_file_content") {
-
-                            if ($tc.args -and $tc.args.TargetFile) {
-
-                                $result.TargetFile = $tc.args.TargetFile
-
-                                if ($tc.args.StartLine) { $result.StartLine = [int]$tc.args.StartLine }
-
-                                if ($tc.args.EndLine) { $result.EndLine = [int]$tc.args.EndLine }
-
-                                return $result
-
+                        if ($tc.name -match "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content") {
+                            if ($tc.args) {
+                                $filePath = if ($tc.args.Path) { $tc.args.Path } elseif ($tc.args.TargetFile) { $tc.args.TargetFile } elseif ($tc.args.file_path) { $tc.args.file_path } else { "" }
+                                if ($filePath) {
+                                    $result.TargetFile = $filePath
+                                    if ($tc.args.StartLine) { $result.StartLine = [int]$tc.args.StartLine }
+                                    if ($tc.args.EndLine) { $result.EndLine = [int]$tc.args.EndLine }
+                                    return $result
+                                }
                             }
-
                         }
-
                     }
-
                 }
-
             }
-
         }
-
         catch {
-
             # Фолбэк без падения
-
         }
-
     }
 
 
