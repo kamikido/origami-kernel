@@ -1,4 +1,8 @@
-﻿﻿# cf-validate v1.4 — Validate 1C configuration root structure
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# cf-validate v1.4 — Validate 1C configuration root structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

@@ -1,4 +1,8 @@
-﻿﻿# role-info v1.2 — Analyze 1C role rights
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# role-info v1.2 — Analyze 1C role rights
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true)][Alias('Path')][string]$RightsPath,

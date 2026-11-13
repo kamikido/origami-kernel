@@ -1,3 +1,13 @@
+---
+id: pb_consolidation_and_integration_containers
+title: Консолидация документов отгрузки и подготовка интеграционных контейнеров
+type: integration
+category: exchange
+status: canonical
+version: 1.0.0
+tags: [интеграция, пакетные_запросы, контейнеры, bsl, json, xdto]
+---
+
 # Архитектурный паттерн: Консолидация документов отгрузки и подготовка интеграционных контейнеров
 
 > **Статус:** Одобренный корпоративный паттерн Origami Kernel  

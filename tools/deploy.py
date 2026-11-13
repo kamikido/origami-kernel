@@ -88,7 +88,7 @@ def check_agents_md(target_dir: Path) -> Optional[str]:
     agents_file = target_dir / "AGENTS.md"
     if not agents_file.exists():
         return "Отсутствует: AGENTS.md"
-    kernel_agents = KERNEL_DIR / "AGENTS.md"
+    kernel_agents = KERNEL_DIR / "templates" / "AGENTS.template.md"
     if not kernel_agents.exists():
         return None
     try:
@@ -110,7 +110,7 @@ def check_agents_md(target_dir: Path) -> Optional[str]:
 def update_agents_md(target_dir: Path, dry_run: bool = False) -> Optional[str]:
     """Safely updates kernel rules block in downstream AGENTS.md without touching project overlay."""
     agents_file = target_dir / "AGENTS.md"
-    kernel_agents = KERNEL_DIR / "AGENTS.md"
+    kernel_agents = KERNEL_DIR / "templates" / "AGENTS.template.md"
     if not kernel_agents.exists():
         return None
 

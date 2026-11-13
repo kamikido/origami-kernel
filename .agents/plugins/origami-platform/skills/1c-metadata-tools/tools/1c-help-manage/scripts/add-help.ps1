@@ -1,4 +1,8 @@
-﻿﻿# help-add v1.9 — Add built-in help to 1C object
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# help-add v1.9 — Add built-in help to 1C object
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

@@ -1,4 +1,8 @@
-﻿﻿# subsystem-compile v1.9 — Create 1C subsystem from JSON definition
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# subsystem-compile v1.9 — Create 1C subsystem from JSON definition
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[string]$DefinitionFile,

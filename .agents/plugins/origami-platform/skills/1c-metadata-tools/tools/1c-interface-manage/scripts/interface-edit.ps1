@@ -1,4 +1,8 @@
-﻿﻿# interface-edit v1.8 — Edit 1C CommandInterface.xml
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# interface-edit v1.8 — Edit 1C CommandInterface.xml
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)][Alias('Path')][string]$CIPath,

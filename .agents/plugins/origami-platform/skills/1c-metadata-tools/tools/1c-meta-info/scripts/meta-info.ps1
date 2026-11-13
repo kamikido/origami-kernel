@@ -1,4 +1,8 @@
-﻿﻿# meta-info v1.4 — Compact summary of 1C metadata object
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# meta-info v1.4 — Compact summary of 1C metadata object
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true)][Alias('Path')][string]$ObjectPath,

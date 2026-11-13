@@ -1,4 +1,8 @@
-﻿﻿# db-load-cf v1.13 — Load 1C configuration from CF file
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# db-load-cf v1.13 — Load 1C configuration from CF file
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # NB: *nix-раскладку платформы (/opt/1cv8/<ver>/1cv8, без .exe) знает только .py-порт — PS на *nix не исполняется.
 <#

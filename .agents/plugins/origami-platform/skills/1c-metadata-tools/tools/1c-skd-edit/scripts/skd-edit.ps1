@@ -1,4 +1,8 @@
-﻿﻿# skd-edit v1.30 — Atomic 1C DCS editor
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# skd-edit v1.30 — Atomic 1C DCS editor
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # NB: парный .py собирает выражения автодат вне f-string ради совместимости с python 3.9 (PEP 701).
 param(

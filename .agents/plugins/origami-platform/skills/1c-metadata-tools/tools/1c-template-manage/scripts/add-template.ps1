@@ -1,4 +1,8 @@
-﻿﻿# template-add v1.10 — Add template to 1C object
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# template-add v1.10 — Add template to 1C object
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

@@ -1,4 +1,8 @@
-﻿﻿# mxl-validate v1.1 — Validate 1C spreadsheet
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# mxl-validate v1.1 — Validate 1C spreadsheet
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Alias('Path')]

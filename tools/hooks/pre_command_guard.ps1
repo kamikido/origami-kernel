@@ -1,4 +1,8 @@
-﻿﻿# pre_command_guard.ps1 — Хук PreToolUse: Защита от деструктивных терминальных команд
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# pre_command_guard.ps1 — Хук PreToolUse: Защита от деструктивных терминальных команд
 
 
 

@@ -1,4 +1,8 @@
-﻿﻿#Requires -Version 5.1
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+#Requires -Version 5.1
 <#
 .SYNOPSIS
     Preview / apply wrapper for the mutating tools of the 1c-metadata-manage

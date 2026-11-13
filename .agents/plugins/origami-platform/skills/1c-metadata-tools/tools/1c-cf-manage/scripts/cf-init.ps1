@@ -1,4 +1,8 @@
-﻿﻿# cf-init v1.3 — Create empty 1C configuration scaffold
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# cf-init v1.3 — Create empty 1C configuration scaffold
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

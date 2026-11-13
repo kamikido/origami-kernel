@@ -1,4 +1,8 @@
-﻿﻿# mxl-info v1.2 — Analyze 1C spreadsheet structure
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# mxl-info v1.2 — Analyze 1C spreadsheet structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Alias('Path')]

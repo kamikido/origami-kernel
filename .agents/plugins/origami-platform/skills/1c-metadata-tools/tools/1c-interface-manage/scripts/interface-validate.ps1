@@ -1,4 +1,8 @@
-﻿﻿# interface-validate v1.1 — Validate 1C CommandInterface.xml structure
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# interface-validate v1.1 — Validate 1C CommandInterface.xml structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)][Alias('Path')][string]$CIPath,

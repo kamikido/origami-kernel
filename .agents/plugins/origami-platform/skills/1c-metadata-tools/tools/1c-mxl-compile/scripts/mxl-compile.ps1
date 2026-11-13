@@ -1,4 +1,8 @@
-﻿﻿# mxl-compile v1.4 — Compile 1C spreadsheet from JSON
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# mxl-compile v1.4 — Compile 1C spreadsheet from JSON
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

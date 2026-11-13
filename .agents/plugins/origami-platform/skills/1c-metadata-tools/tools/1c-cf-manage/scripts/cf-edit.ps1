@@ -1,4 +1,8 @@
-﻿﻿# cf-edit v1.12 — Edit 1C configuration root (Configuration.xml)
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# cf-edit v1.12 — Edit 1C configuration root (Configuration.xml)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: add-childObject places a new entry by NEW_OBJECT_POSITION (end by default, as Configurator).
 param(

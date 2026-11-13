@@ -1,4 +1,8 @@
-﻿﻿# post_edit_bsl.ps1 — Хук PostToolUse: Автоформатирование на лету + Pure-Diff BSL линтер
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# post_edit_bsl.ps1 — Хук PostToolUse: Автоформатирование на лету + Pure-Diff BSL линтер
 
 
 
@@ -96,13 +100,21 @@ try {
 
             $cmdArgs = @($linterScript, "--file", $targetFile, "--json")
 
+            $authorName = "Developer"
+            $cfgPath = Join-Path $wsRoot "origami.config.json"
+            if (Test-Path $cfgPath) {
+                try {
+                    $cfgJson = Get-Content $cfgPath -Raw -Encoding UTF8 | ConvertFrom-Json
+                    if ($cfgJson.author) { $authorName = $cfgJson.author }
+                } catch {}
+            }
             if ($linesArg) {
 
                 $cmdArgs += @("--lines", $linesArg)
 
             } else {
 
-                $cmdArgs += @("--author", "Ширшов")
+                $cmdArgs += @("--author", $authorName)
 
             }
 

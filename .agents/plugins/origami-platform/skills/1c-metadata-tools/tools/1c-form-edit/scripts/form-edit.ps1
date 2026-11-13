@@ -1,4 +1,8 @@
-﻿﻿# form-edit v1.6 — Edit 1C managed form elements
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# form-edit v1.6 — Edit 1C managed form elements
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: DynamicList attributes require settings.mainTable or settings.query
 # and emit <Settings xsi:type="DynamicList">. An attribute without a source

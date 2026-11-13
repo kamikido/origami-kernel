@@ -1,4 +1,8 @@
-﻿﻿# subsystem-validate v1.2 — Validate 1C subsystem XML structure
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# subsystem-validate v1.2 — Validate 1C subsystem XML structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)][Alias('Path')][string]$SubsystemPath,

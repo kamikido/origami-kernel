@@ -1,4 +1,8 @@
-﻿﻿# xdto-compile v1.1 — Build a 1C XDTO package from an XML Schema (XSD)
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# xdto-compile v1.1 — Build a 1C XDTO package from an XML Schema (XSD)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true, ParameterSetName='File')]

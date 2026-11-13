@@ -1,4 +1,8 @@
-﻿﻿# meta-validate v1.13 — Validate 1C metadata object structure (+корневой <Type>: скаляр без структуры = ошибка)
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# meta-validate v1.13 — Validate 1C metadata object structure (+корневой <Type>: скаляр без структуры = ошибка)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local (v1.13, same as meta-validate.py): the object, its form descriptors and
 # Form.xml files carry the version of Configuration.xml (1e/6e); every

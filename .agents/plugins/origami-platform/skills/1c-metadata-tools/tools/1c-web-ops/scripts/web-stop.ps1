@@ -1,4 +1,8 @@
-﻿﻿# web-stop v1.0 — Stop Apache HTTP Server
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# web-stop v1.0 — Stop Apache HTTP Server
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 <#
 .SYNOPSIS

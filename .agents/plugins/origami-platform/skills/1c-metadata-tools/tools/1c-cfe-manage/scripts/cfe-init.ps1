@@ -1,4 +1,8 @@
-﻿﻿# cfe-init v1.2 — Create 1C configuration extension scaffold (CFE)
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# cfe-init v1.2 — Create 1C configuration extension scaffold (CFE)
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

@@ -1,4 +1,8 @@
-﻿﻿# meta-edit v1.24 — Edit existing 1C metadata object XML
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# meta-edit v1.24 — Edit existing 1C metadata object XML
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[string]$DefinitionFile,

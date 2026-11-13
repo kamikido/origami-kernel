@@ -1,4 +1,8 @@
-﻿﻿# web-info v1.0 — Apache & 1C publication status
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# web-info v1.0 — Apache & 1C publication status
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 <#
 .SYNOPSIS

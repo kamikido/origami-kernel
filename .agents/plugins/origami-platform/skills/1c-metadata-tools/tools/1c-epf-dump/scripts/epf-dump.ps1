@@ -1,4 +1,8 @@
-﻿﻿# epf-dump v1.11 — Dump external data processor or report (EPF/ERF) to XML sources
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# epf-dump v1.11 — Dump external data processor or report (EPF/ERF) to XML sources
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # NB: *nix-раскладку платформы (/opt/1cv8/<ver>/1cv8, без .exe) знает только .py-порт — PS на *nix не исполняется.
 <#

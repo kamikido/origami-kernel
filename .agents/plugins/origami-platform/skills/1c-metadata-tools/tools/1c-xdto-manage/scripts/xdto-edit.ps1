@@ -1,4 +1,8 @@
-﻿﻿# xdto-edit v1.0 — Point edits of a 1C XDTO package
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# xdto-edit v1.0 — Point edits of a 1C XDTO package
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true)]

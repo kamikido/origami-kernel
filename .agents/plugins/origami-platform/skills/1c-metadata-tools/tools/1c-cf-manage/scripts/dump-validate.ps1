@@ -1,4 +1,8 @@
-﻿﻿#Requires -Version 5.1
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+#Requires -Version 5.1
 <#
 .SYNOPSIS
     Read-only integrity check of a complete hierarchical Designer XML dump (CF or CFE).

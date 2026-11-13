@@ -1,4 +1,8 @@
-﻿# common_hook.ps1 — Общая библиотека функций для системных хуков Antigravity IDE (Origami Platform)
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# common_hook.ps1 — Общая библиотека функций для системных хуков Antigravity IDE (Origami Platform)
 
 
 

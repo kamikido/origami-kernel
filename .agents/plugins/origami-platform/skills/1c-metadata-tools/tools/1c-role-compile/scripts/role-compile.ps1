@@ -1,4 +1,8 @@
-﻿﻿# role-compile v1.8 — Compile 1C role from JSON
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# role-compile v1.8 — Compile 1C role from JSON
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory)]

@@ -131,6 +131,7 @@ Origami поддерживает любые локальные и облачны
 | `origami doctor` | Диагностика компонентов и определение уровня окружения (L1–L3) |
 | `origami status` | Вывод информации о текущей конфигурации проекта |
 | `origami config [show/get]` | Просмотр параметров `origami.config.json` |
+| `origami lint-kernel` | Статический аудит стандартов ядра (OPCES-1.1, Zero-Leak, BOM) |
 | `origami premodel "<задача>"` | Запуск консилиума моделей OmniRoute: цели, слепые зоны, риски |
 | `origami feedback -m <файл>` | Извлечение архитектурных стандартов из совещания (Learning Loop) |
 | `origami playbook [list/find]` | Каталог и полнотекстовый поиск стандартов долговременной памяти |
@@ -146,17 +147,22 @@ Origami поддерживает любые локальные и облачны
 
 ## 7. Структура репозитория
 
-- `tools/` — платформенный инструментарий (раннер `origami.ps1`, диагностика `doctor.py`, `premodel.py`, `feedback.py`, `playbook.py`, линтинг и деплой).
-- `knowledge/playbooks/` — долговременная память стандартов и архитектурных инвариантов (0 токенов в промпте IDE).
-- `.agents/` — системные правила и спецификации плагина `origami-platform`.
-- `templates/` — генераторы конфигураций (`origami.config.template.json`, `autumn-properties.template.json`, схемы валидации).
-- `.bsl-language-server.json` — калиброванные правила линтинга BSL.
-- `.agents/` — системные правила и спецификации плагина `origami-platform`.
-- `templates/` — генераторы конфигураций (`origami.config.template.json`, `autumn-properties.template.json`, схемы валидации).
+- `tools/` — платформенный инструментарий (раннер `origami.ps1`, `doctor.py`, `premodel.py`, `feedback.py`, `playbook.py`, линтинг BSL и аудит ядра).
+- `docs/standards/` — официальные нормативные стандарты платформы ([OPCES-1.1](docs/standards/origami-engineering-standard.md)).
+- `knowledge/playbooks/` — долговременная память архитектурных стандартов 1С (0 токенов в промпте IDE).
+- `.agents/` — правила агентов (`1c-protocol.md`) и навыки плагина `origami-platform`.
+- `templates/` — шаблоны для downstream-проектов (`AGENTS.template.md`, `origami.config.template.json`, схемы).
 - `.bsl-language-server.json` — калиброванные правила линтинга BSL.
 
 ---
 
-## 7. Лицензия
+## 8. Разработка и стандарты
+
+Разработка ядра регламентируется стандартом [OPCES-1.1 (ГОСТ ОРИГАМИ ЯДРО 1.1)](docs/standards/origami-engineering-standard.md).  
+Порядок участия и отправки изменений описан в [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## 9. Лицензия
 
 Проект распространяется под открытой лицензией [MIT](LICENSE). Разрешено свободное использование в коммерческих и корпоративных разработках.

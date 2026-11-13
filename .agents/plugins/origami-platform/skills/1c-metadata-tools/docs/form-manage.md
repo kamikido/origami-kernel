@@ -1,4 +1,4 @@
-﻿# 1C Form Manage — Patterns, Scaffold, Compile, Edit, Info, Validate
+# 1C Form Manage — Patterns, Scaffold, Compile, Edit, Info, Validate
 
 Comprehensive managed form management: design patterns reference, create/remove forms, compile from JSON, edit elements, analyze structure, validate correctness.
 

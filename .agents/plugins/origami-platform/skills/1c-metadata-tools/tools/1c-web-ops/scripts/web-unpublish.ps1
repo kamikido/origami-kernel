@@ -1,4 +1,8 @@
-﻿﻿# web-unpublish v1.0 — Remove 1C web publication
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# web-unpublish v1.0 — Remove 1C web publication
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # Local: -DryRun / -Force safety gate and consolidated-layout project root.
 <#

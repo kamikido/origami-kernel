@@ -1,4 +1,8 @@
-﻿﻿# form-info v1.5 — Analyze 1C managed form structure
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# form-info v1.5 — Analyze 1C managed form structure
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true)]

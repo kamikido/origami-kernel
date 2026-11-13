@@ -1,3 +1,13 @@
+---
+id: pb_damage_accounting_registers
+title: Сквозной учет материальных состояний и поврежденных ТМЦ (Register-First)
+type: architectural
+category: architecture
+status: canonical
+version: 1.0.0
+tags: [регистры_накопления, остатки, управляемые_блокировки, инвариант_7, проведение]
+---
+
 # Архитектурный паттерн: Сквозной учет материальных состояний и поврежденных ТМЦ (Register-First)
 
 > **Статус:** Одобренный корпоративный паттерн Origami Kernel  

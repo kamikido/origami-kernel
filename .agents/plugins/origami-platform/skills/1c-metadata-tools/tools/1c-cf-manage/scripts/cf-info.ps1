@@ -1,4 +1,8 @@
-﻿﻿# cf-info v1.4 — Compact summary of 1C configuration root
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# cf-info v1.4 — Compact summary of 1C configuration root
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[Parameter(Mandatory=$true)][Alias('Path')][string]$ConfigPath,

@@ -44,6 +44,7 @@ function Show-Help {
   doctor                     Диагностика окружения и определение уровня деградации (L1/L2/L3)
   status                     Статус активного проекта, расширения и базы данных
   config [show|get <ключ>]   Просмотр конфигурации проекта (origami.config.json)
+  lint-kernel                Статический аудит стандартов ядра (OPCES-1.1, Zero-Leak, BOM)
 
 Команды AI-консилиума и качества:
   premodel "<задача>"        Консилиум моделей OmniRoute: цели, слепые зоны, риски
@@ -91,6 +92,10 @@ switch ($cmd) {
 
     "config" {
         python (Join-Path $PSScriptRootResolved "origami_config.py") @SubArgs
+    }
+
+    "lint-kernel" {
+        python (Join-Path $PSScriptRootResolved "lint_kernel.py") @SubArgs
     }
 
     "premodel" {

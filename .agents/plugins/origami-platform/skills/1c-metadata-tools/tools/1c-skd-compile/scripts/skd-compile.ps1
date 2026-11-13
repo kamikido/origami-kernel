@@ -1,4 +1,8 @@
-﻿﻿# skd-compile v1.109 — Compile 1C DCS from JSON
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# skd-compile v1.109 — Compile 1C DCS from JSON
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 param(
 	[string]$DefinitionFile,

@@ -1,4 +1,8 @@
-﻿﻿# db-load-dt v1.12 — Load 1C information base from DT file
+﻿<#
+.SYNOPSIS
+    Origami Platform Component Script
+#>
+# db-load-dt v1.12 — Load 1C information base from DT file
 # Source: https://github.com/Nikolay-Shirokov/cc-1c-skills
 # NB: *nix-раскладку платформы (/opt/1cv8/<ver>/1cv8, без .exe) знает только .py-порт — PS на *nix не исполняется.
 <#
