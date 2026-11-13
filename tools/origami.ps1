@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Origami CLI Facade — Единая консоль управления операционной платформой разработки 1С.
 .DESCRIPTION
