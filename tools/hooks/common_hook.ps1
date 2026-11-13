@@ -3,12 +3,11 @@
 
 
 # 1. Гарантируем UTF-8 ввод/вывод в Windows PowerShell 5.1 / 7
-
-[Console]::InputEncoding = [Text.Encoding]::UTF8
-
-[Console]::OutputEncoding = [Text.Encoding]::UTF8
-
-$OutputEncoding = [Text.Encoding]::UTF8
+try {
+    [Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false)
+    [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+    $OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+} catch {}
 
 
 

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/post_edit_bsl.ps1",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/post_edit_bsl.ps1', '../../../tools/hooks/post_edit_bsl.ps1', './tools/hooks/post_edit_bsl.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{}' }\"",
             "timeout": 20
           }
         ]
@@ -19,7 +19,7 @@
     "Stop": [
       {
         "type": "command",
-        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/stop_guard.ps1",
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/stop_guard.ps1', '../../../tools/hooks/stop_guard.ps1', './tools/hooks/stop_guard.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{\\\"decision\\\":\\\"allow\\\"}' }\"",
         "timeout": 15
       }
     ]
@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/hooks/pre_command_guard.ps1",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/pre_command_guard.ps1', '../../../tools/hooks/pre_command_guard.ps1', './tools/hooks/pre_command_guard.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{\\\"decision\\\":\\\"allow\\\"}' }\"",
             "timeout": 5
           }
         ]
