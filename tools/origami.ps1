@@ -48,6 +48,7 @@ function Show-Help {
 Команды AI-консилиума и качества:
   premodel "<задача>"        Консилиум моделей OmniRoute: цели, слепые зоны, риски
   feedback -m <стенограмма>  Архитектурный анализ совещания (Continuous Learning Loop)
+  playbook [list|find|read]  Каталог архитектурных плейбуков долговременной памяти
   audit <файл|diff>          Независимый AI-аудит качества BSL-кода
   format <файл> [--diff]     Автоформатирование BSL на 120 символов (OneScript)
   lint <файл> [-l строки]    Pure-Diff статический линтинг измененных строк
@@ -106,6 +107,10 @@ switch ($cmd) {
             exit 1
         }
         python (Join-Path $PSScriptRootResolved "feedback.py") @SubArgs
+    }
+
+    "playbook" {
+        python (Join-Path $PSScriptRootResolved "playbook.py") @SubArgs
     }
 
     "audit" {
