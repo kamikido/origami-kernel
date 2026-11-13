@@ -81,6 +81,61 @@ def confirm_session_kill(force: bool = False) -> bool:
         return False
 
 
+def check_agents_md(target_dir: Path) -> Optional[str]:
+    """Checks synchronization of kernel rules block in downstream AGENTS.md."""
+    agents_file = target_dir / "AGENTS.md"
+    if not agents_file.exists():
+        return "Отсутствует: AGENTS.md"
+    kernel_agents = KERNEL_DIR / "AGENTS.md"
+    if not kernel_agents.exists():
+        return None
+    try:
+        import re
+        k_text = kernel_agents.read_text(encoding="utf-8")
+        t_text = agents_file.read_text(encoding="utf-8")
+        k_match = re.search(r"<!-- origami-kernel-rules -->(.*?)<!-- /origami-kernel-rules -->", k_text, re.DOTALL)
+        t_match = re.search(r"<!-- origami-kernel-rules -->(.*?)<!-- /origami-kernel-rules -->", t_text, re.DOTALL)
+        if k_match and t_match:
+            if k_match.group(1).strip() != t_match.group(1).strip():
+                return "Отличается: блок правил ядра в AGENTS.md"
+        elif not t_match:
+            return "Устаревший формат AGENTS.md (отсутствуют метки origami-kernel-rules)"
+    except Exception:
+        pass
+    return None
+
+
+def update_agents_md(target_dir: Path, dry_run: bool = False) -> Optional[str]:
+    """Safely updates kernel rules block in downstream AGENTS.md without touching project overlay."""
+    agents_file = target_dir / "AGENTS.md"
+    kernel_agents = KERNEL_DIR / "AGENTS.md"
+    if not kernel_agents.exists():
+        return None
+
+    if not agents_file.exists():
+        if not dry_run:
+            tmpl = KERNEL_DIR / "templates" / "AGENTS.template.md"
+            if tmpl.exists():
+                shutil.copy2(tmpl, agents_file)
+        return "Создан: AGENTS.md"
+
+    try:
+        import re
+        k_text = kernel_agents.read_text(encoding="utf-8")
+        t_text = agents_file.read_text(encoding="utf-8")
+        k_match = re.search(r"<!-- origami-kernel-rules -->(.*?)<!-- /origami-kernel-rules -->", k_text, re.DOTALL)
+        t_match = re.search(r"<!-- origami-kernel-rules -->(.*?)<!-- /origami-kernel-rules -->", t_text, re.DOTALL)
+        if k_match and t_match:
+            if k_match.group(1).strip() != t_match.group(1).strip():
+                if not dry_run:
+                    new_text = t_text[:t_match.start(1)] + k_match.group(1) + t_text[t_match.end(1):]
+                    agents_file.write_text(new_text, encoding="utf-8")
+                return "Обновлен: блок правил ядра в AGENTS.md"
+    except Exception:
+        pass
+    return None
+
+
 def audit_project(target_dir: Path) -> Tuple[bool, List[str]]:
     """Audits a downstream project against Kernel."""
     if not target_dir.exists():
@@ -107,6 +162,11 @@ def audit_project(target_dir: Path) -> Tuple[bool, List[str]]:
         else:
             if not filecmp.cmp(src, dst, shallow=False):
                 diffs.append(f"Отличается: {rel_path}")
+
+    # Check AGENTS.md kernel rules block
+    agents_diff = check_agents_md(target_dir)
+    if agents_diff:
+        diffs.append(agents_diff)
 
     return len(diffs) == 0, diffs
 
@@ -160,6 +220,10 @@ def update_project(target_dir: Path, dry_run: bool = False) -> List[str]:
             if need_copy and not dry_run:
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, dst)
+
+    agents_act = update_agents_md(target_dir, dry_run=dry_run)
+    if agents_act:
+        actions.append(agents_act)
 
     return actions
 
