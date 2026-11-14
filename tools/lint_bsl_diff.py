@@ -20,7 +20,7 @@ import re
 import argparse
 import json
 import subprocess
-from typing import Set, Tuple, List, Dict, Any
+from typing import Set, Tuple, List, Dict, Any, Optional
 
 # Гарантируем UTF-8 вывод на консоль Windows
 if sys.stdout.encoding != 'utf-8':
@@ -140,7 +140,7 @@ def find_author_green_lines(lines: List[str], author_marker: str) -> Tuple[Set[i
 def lint_bsl_content(
     file_path: str,
     content: str,
-    target_lines: Set[int] = None,
+    target_lines: Optional[Set[int]] = None,
     author: str = "",
     tab_width: int = 4,
     strict_else: bool = False
@@ -152,13 +152,13 @@ def lint_bsl_content(
     # 1. Определение амнистированных строк (Red Hunks // { - ... })
     author_green, amnestied_lines = find_author_green_lines(lines, author)
 
-    if not target_lines:
+    if target_lines is None:
         if author_green:
             check_lines = author_green
         else:
             check_lines = set(range(1, total_lines + 1))
     else:
-        check_lines = target_lines
+        check_lines = set(target_lines)
 
     # Исключаем амнистированные строки удаления
     check_lines = check_lines - amnestied_lines
@@ -355,7 +355,7 @@ def main():
         sys.exit(2)
 
     # Определение проверяемых строк
-    target_lines = set()
+    target_lines = None
     if args.git_diff is not None:
         target_lines = get_git_changed_lines(file_path, ref=args.git_diff)
     elif args.lines:

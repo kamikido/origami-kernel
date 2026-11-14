@@ -128,6 +128,7 @@ def run_doctor() -> Dict[str, Any]:
         "onescript": {"ok": False, "path": None, "remediation": None},
         "platform_1c": {"ok": False, "path": None, "ibcmd": None, "versions": []},
         "omniroute": {"ok": False, "status": ""},
+        "negative_control": {"ok": False, "status": ""},
         "level": "L1",
         "level_name": "L1: Standalone Core (Zero-Dependency)",
         "capabilities": [],
@@ -176,7 +177,25 @@ def run_doctor() -> Dict[str, Any]:
     if not omni_ok:
         results["warnings"].append(f"OmniRoute оффлайн: консилиум моделей переключится в одиночный режим агента.")
 
-    # 5. Determine Capability Level
+    # 5. Negative Control (Зоркость линтера BSL)
+    try:
+        from negative_control import run_negative_control
+        nc_ok, nc_report = run_negative_control()
+        results["negative_control"] = {
+            "ok": nc_ok,
+            "status": nc_report.get("status", "UNKNOWN"),
+            "detected": nc_report.get("total_detected", 0),
+            "expected": nc_report.get("total_expected", 0)
+        }
+        if nc_ok:
+            results["capabilities"].append(f"Отрицательный контроль линтера: Зрячий ({nc_report.get('total_detected')}/{nc_report.get('total_expected')} стандартов BSL)")
+        else:
+            results["warnings"].append(f"Отрицательный контроль линтера провален: обнаружено ослепление линтера ({nc_report.get('total_detected')}/{nc_report.get('total_expected')} дефектов)!")
+    except Exception as e:
+        results["negative_control"] = {"ok": False, "error": str(e), "detected": 0, "expected": 0}
+        results["warnings"].append(f"Не удалось выполнить отрицательный контроль: {e}")
+
+    # 6. Determine Capability Level
     # L1: Python is working (always true if we are running)
     results["capabilities"].append("Pure-Diff BSL Линтер (lint_bsl_diff.py)")
     results["capabilities"].append("Синтез ТЗ разработчика по стандарту Invariant-Driven Development")
@@ -224,6 +243,10 @@ def print_doctor_report(res: Dict[str, Any]) -> None:
     print(f"  {status_badge(res['platform_1c']['ok'])} Платформа 1С:  {v8_stat}")
 
     print(f"  {status_badge(res['omniroute']['ok'])} OmniRoute:     {res['omniroute']['status']}")
+
+    nc_info = res.get("negative_control", {})
+    nc_stat = f"Зрячий ({nc_info.get('detected', 0)}/{nc_info.get('expected', 0)} стандартов BSL)" if nc_info.get("ok") else "Ослеп / Ошибка"
+    print(f"  {status_badge(nc_info.get('ok', False))} BSL Линтер:     {nc_stat}")
 
     print(f"\n2. Активный уровень отказоустойчивости (Capability Level):")
     print(f"  >>> {res['level_name']} <<<")

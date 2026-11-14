@@ -74,7 +74,10 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["file", "server"],
+          "enum": [
+            "file",
+            "server"
+          ],
           "description": "Database connection type: file or server"
         },
         "path": {
@@ -125,7 +128,9 @@
         },
         "councilModels": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "List of model IDs to query in Pre-Modeling Council"
         },
         "criticModel": {
@@ -138,13 +143,30 @@
       "type": "object",
       "description": "OmniRoute local orchestration settings (backward compatible)",
       "properties": {
-        "endpoint": { "type": "string" },
-        "apiKeyEnv": { "type": "string" },
-        "subagentKey": { "type": "string" },
-        "adminKeyEnv": { "type": "string" },
-        "adminKey": { "type": "string" },
-        "councilModels": { "type": "array", "items": { "type": "string" } },
-        "criticModel": { "type": "string" }
+        "endpoint": {
+          "type": "string"
+        },
+        "apiKeyEnv": {
+          "type": "string"
+        },
+        "subagentKey": {
+          "type": "string"
+        },
+        "adminKeyEnv": {
+          "type": "string"
+        },
+        "adminKey": {
+          "type": "string"
+        },
+        "councilModels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "criticModel": {
+          "type": "string"
+        }
       }
     },
     "capabilities": {
@@ -153,7 +175,12 @@
       "properties": {
         "level": {
           "type": "string",
-          "enum": ["auto", "L1", "L2", "L3"],
+          "enum": [
+            "auto",
+            "L1",
+            "L2",
+            "L3"
+          ],
           "description": "Target capability level: auto, L1, L2, L3"
         },
         "allowDataSeedingOnProduction": {
@@ -170,9 +197,15 @@
       "type": "object",
       "description": "Custom binary paths for tools (auto for path discovery)",
       "properties": {
-        "git": { "type": "string" },
-        "onescript": { "type": "string" },
-        "platform": { "type": "string" }
+        "git": {
+          "type": "string"
+        },
+        "onescript": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
       }
     }
   }

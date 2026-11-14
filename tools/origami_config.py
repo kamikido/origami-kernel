@@ -24,11 +24,31 @@ def find_project_root(start_dir: Optional[Path] = None) -> Path:
     return Path.cwd()
 
 
+def load_env_file(search_dirs: list[Path]) -> None:
+    """Loads environment variables from local .env or .origami.env if present (Zero-Leak)."""
+    for sdir in search_dirs:
+        for fname in (".env", ".origami.env"):
+            env_file = sdir / fname
+            if env_file.exists():
+                try:
+                    for line in env_file.read_text(encoding="utf-8", errors="replace").splitlines():
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            k, v = line.split("=", 1)
+                            k = k.strip()
+                            v = v.strip().strip("'\"")
+                            if k and k not in os.environ:
+                                os.environ[k] = v
+                except Exception:
+                    pass
+
+
 class OrigamiConfig:
     """Unified configuration accessor for Origami Kernel."""
 
     def __init__(self, config_path: Optional[Path] = None):
         self.root_dir = find_project_root(config_path.parent if config_path else None)
+        load_env_file([self.root_dir, self.root_dir.parent, Path.cwd()])
         if config_path:
             self.config_file = config_path
         else:

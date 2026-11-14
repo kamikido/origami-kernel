@@ -45,6 +45,7 @@ function Show-Help {
   status                     Статус активного проекта, расширения и базы данных
   config [show|get <ключ>]   Просмотр конфигурации проекта (origami.config.json)
   lint-kernel                Статический аудит стандартов ядра (OPCES-1.1, Zero-Leak, BOM)
+  test                       Запуск полного набора тестов ядра (tests/run_all_tests.py)
 
 Команды AI-консилиума и качества:
   premodel "<задача>"        Консилиум моделей OmniRoute: цели, слепые зоны, риски
@@ -53,7 +54,8 @@ function Show-Help {
   audit <файл|diff>          Независимый AI-аудит качества BSL-кода
   format <файл> [--diff]     Автоформатирование BSL на 120 символов (OneScript)
   lint <файл> [-l строки]    Pure-Diff статический линтинг измененных строк
-  check <файл>               Комплексный контроль качества (format + lint)
+  negative-control           Аппаратный отрицательный контроль зоркости линтера (BSL Negative Control)
+  check <файл>               Комплексный контроль качества (negative-control + format + lint)
 
 Команды поставки и данных:
   deploy [status|update|init] Синхронизация и развертывание проектов из ядра
@@ -96,6 +98,10 @@ switch ($cmd) {
 
     "lint-kernel" {
         python (Join-Path $PSScriptRootResolved "lint_kernel.py") @SubArgs
+    }
+
+    "test" {
+        python (Join-Path $ProjectRoot "tests\run_all_tests.py") @SubArgs
     }
 
     "premodel" {
@@ -150,16 +156,26 @@ switch ($cmd) {
         python (Join-Path $PSScriptRootResolved "lint_bsl_diff.py") --file $targetFile @remainingArgs
     }
 
+    "negative-control" {
+        python (Join-Path $PSScriptRootResolved "negative_control.py") @SubArgs
+    }
+
     "check" {
         if ($SubArgs.Count -lt 1) {
             Write-Host "Ошибка: Укажите файл BSL для комплексного контроля." -ForegroundColor Red
             exit 1
         }
         $targetFile = $SubArgs[0]
-        Write-Host ">>> Шаг 1/2: Автоформатирование BSL (Smart Diff, 120 символов)..." -ForegroundColor Cyan
+        Write-Host ">>> Шаг 0/3: Проверка отрицательного контроля (Negative Control)..." -ForegroundColor Cyan
+        python (Join-Path $PSScriptRootResolved "negative_control.py") --strict
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "[CRITICAL FAIL] Линтер ослеп! Анализ боевого кода заблокирован." -ForegroundColor Red
+            exit 2
+        }
+        Write-Host "`n>>> Шаг 1/3: Автоформатирование BSL (Smart Diff, 120 символов)..." -ForegroundColor Cyan
         $formatScript = Join-Path $PSScriptRootResolved "format_bsl\format_bsl.os"
         & "oscript" $formatScript $targetFile --diff
-        Write-Host "`n>>> Шаг 2/2: Pure-Diff статический линтинг..." -ForegroundColor Cyan
+        Write-Host "`n>>> Шаг 2/3: Pure-Diff статический линтинг..." -ForegroundColor Cyan
         python (Join-Path $PSScriptRootResolved "lint_bsl_diff.py") --file $targetFile
     }
 

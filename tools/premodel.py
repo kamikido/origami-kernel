@@ -8,6 +8,7 @@ Pure Python standard library (urllib + concurrent.futures).
 
 import sys
 import os
+import re
 import json
 import argparse
 import urllib.request
@@ -140,13 +141,42 @@ def load_project_base_context() -> str:
     return "\n\n".join(ctx_parts)
 
 
+def extract_json_payload(raw_text: str) -> Dict[str, Any]:
+    """Robustly extracts and parses JSON payload from LLM responses."""
+    # 1. Strip reasoning tokens <think>...</think> if present
+    cleaned = re.sub(r"<think>[\s\S]*?</think>", "", raw_text).strip()
+
+    # 2. Extract content from markdown code fence ```json ... ``` or ``` ... ```
+    m = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", cleaned)
+    candidate = m.group(1).strip() if m else cleaned
+
+    # 3. Direct attempt with strict=False
+    try:
+        return json.loads(candidate, strict=False)
+    except Exception:
+        pass
+
+    # 4. Outermost { ... } slice
+    start = candidate.find('{')
+    end = candidate.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        sub = candidate[start:end+1]
+        try:
+            return json.loads(sub, strict=False)
+        except Exception:
+            pass
+
+    # 5. Last resort: try on cleaned text with strict=False
+    return json.loads(cleaned, strict=False)
+
+
 def call_single_model(
     model_name: str,
     task_text: str,
     context_text: str,
     endpoint: str,
     api_key: str,
-    timeout: int = 90
+    timeout: int = 120
 ) -> Dict[str, Any]:
     """Calls OmniRoute API for a single model and parses JSON response."""
     url = f"{endpoint.rstrip('/')}/chat/completions"
@@ -186,16 +216,7 @@ def call_single_model(
             data = json.loads(res_body)
             raw_text = data["choices"][0]["message"]["content"].strip()
 
-            # Очистка markdown блоков ```json ... ```
-            if raw_text.startswith("```"):
-                lines = raw_text.splitlines()
-                if lines[0].startswith("```"):
-                    lines = lines[1:]
-                if lines and lines[-1].startswith("```"):
-                    lines = lines[:-1]
-                raw_text = "\n".join(lines).strip()
-
-            parsed = json.loads(raw_text)
+            parsed = extract_json_payload(raw_text)
             parsed["_source_model"] = model_name
             parsed["_ok"] = True
             return parsed
