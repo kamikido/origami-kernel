@@ -1,0 +1,51 @@
+# ==============================================================================
+# Origami Kernel — Git Ignore Policy
+# ==============================================================================
+
+# 1C Databases & Delivery Binaries (Never commit customer databases or binaries into kernel)
+*.1CD
+*.1cd
+*.cfl
+*.cf
+*.cfe
+*.epf
+*.erf
+
+# Local Configuration & Secrets (Templates are tracked, local files are ignored)
+origami.config.json
+origami.workspace.json
+autumn-properties.json
+*.env
+*.env.local
+*.key
+*.pem
+credentials.json
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+
+# Temporary files & runtime logs
+*.log
+*.tmp
+scratch/
+temp/
+build/
+tests/reports/
+knowledge/cases/
+
+# IDE and OS artifacts
+.vscode/
+.idea/
+*.suo
+*.user
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# BSL Language Server cache
+.bsl-language-server/
+.phoenixbsl/

@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "1c-agent": {
+      "serverUrl": "http://127.0.0.1:55764/_active/agent/mcp"
+    },
+    "1c-bsp": {
+      "serverUrl": "http://127.0.0.1:55767/_active/bsp/mcp"
+    },
+    "1c-codemetadata": {
+      "serverUrl": "http://127.0.0.1:55762/_active/codemetadata/mcp"
+    },
+    "1c-comparisons": {
+      "serverUrl": "http://127.0.0.1:55770/_active/comparisons/mcp"
+    },
+    "1c-forms": {
+      "serverUrl": "http://127.0.0.1:55766/_active/forms/mcp"
+    },
+    "1c-graphmetadata": {
+      "serverUrl": "http://127.0.0.1:55763/_active/graphmetadata/mcp"
+    },
+    "1c-helpsearch": {
+      "serverUrl": "http://127.0.0.1:55761/_active/helpsearch/mcp"
+    },
+    "1c-standards": {
+      "serverUrl": "http://127.0.0.1:55768/_active/standards/mcp"
+    },
+    "1c-syntaxcheck": {
+      "serverUrl": "http://127.0.0.1:55765/_active/syntaxcheck/mcp"
+    }
+  }
+}

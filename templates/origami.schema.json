@@ -1,0 +1,179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Origami Configuration Schema",
+  "description": "JSON Schema for origami.config.json configuration files in Origami Kernel projects",
+  "type": "object",
+  "required": [
+    "origami",
+    "project"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URL or relative path to this JSON Schema file"
+    },
+    "origami": {
+      "type": "object",
+      "description": "Kernel version and metadata",
+      "required": [
+        "version",
+        "name"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version of the Origami Kernel"
+        },
+        "name": {
+          "type": "string",
+          "description": "Framework or kernel name"
+        },
+        "upstream": {
+          "type": "string",
+          "description": "Upstream repository URL or directory path"
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "description": "Project-specific 1C identifiers and metadata",
+      "required": [
+        "name",
+        "prefix"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique technical project name"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable project title"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "1C metadata prefix (e.g. ext_)"
+        },
+        "extensionName": {
+          "type": "string",
+          "description": "Target 1C extension name in metadata"
+        },
+        "extensionSrc": {
+          "type": "string",
+          "description": "Source directory containing extension XML files"
+        },
+        "subsystem": {
+          "type": "string",
+          "description": "Main 1C subsystem name for extension objects"
+        }
+      }
+    },
+    "infobase": {
+      "type": "object",
+      "description": "Connection parameters for 1C:Enterprise infobase",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file", "server"],
+          "description": "Database connection type: file or server"
+        },
+        "path": {
+          "type": "string",
+          "description": "File path to 1C infobase directory"
+        },
+        "server": {
+          "type": "string",
+          "description": "1C:Enterprise cluster server address"
+        },
+        "name": {
+          "type": "string",
+          "description": "Cluster infobase name"
+        },
+        "user": {
+          "type": "string",
+          "description": "1C infobase username"
+        },
+        "passwordEnv": {
+          "type": "string",
+          "description": "Environment variable name storing database password"
+        },
+        "version": {
+          "type": "string",
+          "description": "Target 1C platform major/minor version (e.g. 8.3.27)"
+        }
+      }
+    },
+    "llm": {
+      "type": "object",
+      "description": "Universal OpenAI-compatible LLM endpoint and key configuration",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "description": "Provider type (default: openai-compatible)"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "OpenAI-compatible base URL (e.g. http://localhost:20128/v1)"
+        },
+        "apiKeyEnv": {
+          "type": "string",
+          "description": "Environment variable name storing the LLM API key"
+        },
+        "apiKey": {
+          "type": "string",
+          "description": "Optional direct API key (empty in templates)"
+        },
+        "councilModels": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of model IDs to query in Pre-Modeling Council"
+        },
+        "criticModel": {
+          "type": "string",
+          "description": "Model ID used for Adversarial Review"
+        }
+      }
+    },
+    "omniroute": {
+      "type": "object",
+      "description": "OmniRoute local orchestration settings (backward compatible)",
+      "properties": {
+        "endpoint": { "type": "string" },
+        "apiKeyEnv": { "type": "string" },
+        "subagentKey": { "type": "string" },
+        "adminKeyEnv": { "type": "string" },
+        "adminKey": { "type": "string" },
+        "councilModels": { "type": "array", "items": { "type": "string" } },
+        "criticModel": { "type": "string" }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "Graceful degradation policy and safety flags",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["auto", "L1", "L2", "L3"],
+          "description": "Target capability level: auto, L1, L2, L3"
+        },
+        "allowDataSeedingOnProduction": {
+          "type": "boolean",
+          "description": "Safety lock preventing fake test data creation on production databases"
+        },
+        "fallbackOnMissingTools": {
+          "type": "boolean",
+          "description": "Gracefully degrade capabilities if OneScript or 1cv8 are missing"
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "description": "Custom binary paths for tools (auto for path discovery)",
+      "properties": {
+        "git": { "type": "string" },
+        "onescript": { "type": "string" },
+        "platform": { "type": "string" }
+      }
+    }
+  }
+}

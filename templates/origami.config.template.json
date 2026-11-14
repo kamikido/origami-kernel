@@ -1,0 +1,52 @@
+{
+  "$schema": "./origami.schema.json",
+  "origami": {
+    "version": "1.1.2",
+    "name": "Origami Kernel",
+    "upstream": ""
+  },
+  "project": {
+    "name": "{{PROJECT_NAME}}",
+    "title": "{{PROJECT_TITLE}}",
+    "prefix": "{{PREFIX}}",
+    "extensionName": "{{EXTENSION_NAME}}",
+    "extensionSrc": "{{EXTENSION_SRC}}",
+    "subsystem": "{{SUBSYSTEM}}"
+  },
+  "infobase": {
+    "type": "file",
+    "path": "{{INFOBASE_PATH}}",
+    "server": "",
+    "name": "",
+    "user": "{{DB_USER}}",
+    "passwordEnv": "ORIGAMI_DB_PASSWORD",
+    "version": "{{PLATFORM_VERSION}}"
+  },
+  "llm": {
+    "provider": "openai-compatible",
+    "endpoint": "http://localhost:20128/v1",
+    "apiKeyEnv": "ORIGAMI_LLM_KEY",
+    "apiKey": "",
+    "councilModels": ["auto/best-coding", "auto/smart", "auto/best-reasoning"],
+    "criticModel": "auto/best-reasoning"
+  },
+  "omniroute": {
+    "endpoint": "http://localhost:20128/v1",
+    "apiKeyEnv": "OMNIROUTE_API_KEY",
+    "subagentKey": "",
+    "adminKeyEnv": "OMNIROUTE_ADMIN_KEY",
+    "adminKey": "",
+    "councilModels": ["auto/best-coding", "auto/smart", "auto/best-reasoning"],
+    "criticModel": "auto/best-reasoning"
+  },
+  "capabilities": {
+    "level": "auto",
+    "allowDataSeedingOnProduction": false,
+    "fallbackOnMissingTools": true
+  },
+  "tools": {
+    "git": "auto",
+    "onescript": "auto",
+    "platform": "auto"
+  }
+}

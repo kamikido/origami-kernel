@@ -1,0 +1,42 @@
+{
+  "bsl-quality-gate": {
+    "enabled": true,
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/post_edit_bsl.ps1', '../../../tools/hooks/post_edit_bsl.ps1', './tools/hooks/post_edit_bsl.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{}' }\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "task-completion-guard": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/stop_guard.ps1', '../../../tools/hooks/stop_guard.ps1', './tools/hooks/stop_guard.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{\\\"decision\\\":\\\"allow\\\"}' }\"",
+        "timeout": 15
+      }
+    ]
+  },
+  "safety-gate": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.UTF8Encoding]::new($false); $p = Resolve-Path '../tools/hooks/pre_command_guard.ps1', '../../../tools/hooks/pre_command_guard.ps1', './tools/hooks/pre_command_guard.ps1' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Path -First 1; if ($p) { & $p } else { Write-Output '{\\\"decision\\\":\\\"allow\\\"}' }\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
