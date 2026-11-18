@@ -36,6 +36,8 @@ IGNORE_DIRS = {
 IGNORE_FILES = {
     "LICENSE",
     "credentials.json",
+    "origami.config.json",
+    "origami.workspace.json",
 }
 
 # Binary extensions to skip

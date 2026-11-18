@@ -44,13 +44,22 @@ EXPECTED_DEFECTS: Dict[str, str] = {
 
 
 def find_default_fixture() -> Optional[Path]:
-    """Ищет эталонную синтетическую фикстуру в стандартных путях ядра."""
+    """Ищет эталонную синтетическую фикстуру в стандартных путях ядра или upstream."""
     root_dir = CUR_DIR.parent
     candidates = [
         root_dir / "tests" / "fixtures" / "negative_control_synthetic.bsl",
         CUR_DIR / "fixtures" / "negative_control_synthetic.bsl",
         Path.cwd() / "tests" / "fixtures" / "negative_control_synthetic.bsl"
     ]
+    try:
+        from origami_config import get_config
+        cfg = get_config()
+        if cfg:
+            upstream = cfg.get("origami.upstream")
+            if upstream:
+                candidates.insert(0, Path(upstream) / "tests" / "fixtures" / "negative_control_synthetic.bsl")
+    except Exception:
+        pass
     for c in candidates:
         if c.is_file():
             return c

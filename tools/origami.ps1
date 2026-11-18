@@ -48,9 +48,10 @@ function Show-Help {
   test                       Запуск полного набора тестов ядра (tests/run_all_tests.py)
 
 Команды AI-консилиума и качества:
-  premodel "<задача>"        Консилиум моделей OmniRoute: цели, слепые зоны, риски
+  premodel "<задача>" [--role analyst|architect|all] Консилиум граней: бизнес-анализ, архитектура 1С
   feedback -m <стенограмма>  Архитектурный анализ совещания (Continuous Learning Loop)
   playbook [list|find|read]  Каталог архитектурных плейбуков долговременной памяти
+  source [list|verify|add]   Реестр источников знаний и прикладных проектов (Zero-Leak)
   audit <файл|diff>          Независимый AI-аудит качества BSL-кода
   format <файл> [--diff]     Автоформатирование BSL на 120 символов (OneScript)
   lint <файл> [-l строки]    Pure-Diff статический линтинг измененных строк
@@ -122,6 +123,10 @@ switch ($cmd) {
 
     "playbook" {
         python (Join-Path $PSScriptRootResolved "playbook.py") @SubArgs
+    }
+
+    "source" {
+        python (Join-Path $PSScriptRootResolved "source_manager.py") @SubArgs
     }
 
     "audit" {
