@@ -48,6 +48,7 @@ KERNEL_MANAGED_ITEMS = [
     "tools/adversarial_review.py",
     "tools/lint_bsl_diff.py",
     "tools/negative_control.py",
+    "tools/form_studio.py",
     "tools/playbook.py",
     "tools/source_manager.py",
     "tools/extract_case.py",
