@@ -61,6 +61,7 @@ function Show-Help {
 Команды поставки и данных:
   deploy [status|update|init] Синхронизация и развертывание проектов из ядра
   query "<текст запроса>"    Выполнение запроса 1С через COM-соединение
+  form [compile|inject-bsl|lint|preview] Проектирование и безопасная адаптация управляемых форм (ИТС)
 
 Примеры:
   .\tools\origami.ps1 doctor
@@ -195,6 +196,10 @@ switch ($cmd) {
         }
         $queryScript = Join-Path $PSScriptRootResolved "query.os"
         & "oscript" $queryScript @SubArgs
+    }
+
+    "form" {
+        python (Join-Path $PSScriptRootResolved "form_studio.py") @SubArgs
     }
 
     default {

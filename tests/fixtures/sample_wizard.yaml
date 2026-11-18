@@ -1,0 +1,41 @@
+archetype: "wizard"
+title: "Помощник создания номенклатуры и ресурсных спецификаций"
+prefix: "САА_"
+parent_group: "ГруппаШапка"
+
+state:
+  Поставщик:
+    type: "CatalogRef.Контрагенты"
+    title: "Поставщик"
+    req: true
+  СоздаватьАвтоматически:
+    type: "bool"
+    title: "Создавать карточки автоматически"
+    default: true
+  Примечание:
+    type: "str"
+    title: "Примечание"
+    multiline: true
+    height: 3
+  ТаблицаНоменклатуры:
+    type: "table"
+    title: "Список позиций к созданию"
+    stretch: true
+    columns:
+      Артикул:
+        type: "str"
+        title: "Артикул"
+        width: 15
+      Наименование:
+        type: "str"
+        title: "Наименование"
+        width: 40
+
+actions:
+  - Назад:
+      title: "< Назад"
+  - Далее:
+      title: "Далее >"
+      default: true
+  - Готово:
+      title: "Готово"
